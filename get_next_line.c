@@ -25,16 +25,3 @@ int		get_next_line(const int fd, char **line)
 		tab[fd] = ft_strnew(0);
 	bytes = read(fd, buff, BUFF_SIZE);
 }
-
-int main()
-{
-	int fd,s;
-	char *c = (char *) calloc(10000, sizeof(char));
-	fd = open("get_next_line.h", O_RDONLY);
-	printf("%d",fd);
-	s = read(fd,c,10000);
-	printf("called read(%d, c, 10).  returned that"
-			" %d bytes  were read.\n", fd, s);
-	c[s] = '\0'; 
-	printf("Those bytes are as follows: \n%s\n", c);
-}
