@@ -6,16 +6,35 @@
 /*   By: hkchikec <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 02:13:15 by hkchikec          #+#    #+#             */
-/*   Updated: 2019/06/25 19:59:28 by hkchikec         ###   ########.fr       */
+/*   Updated: 2019/06/27 19:54:47 by hkchikec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		get_next_line(const int fd, char **line)
+static unsigned int	ft_len(char *str)
 {
-	char		**buff[BUFF_SIZE + 1];
-	static char	*tab[5000];
+	int i;
+
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	return (i);
+}
+
+static char			*ft_rest(char *tab)
+{
+	if (ft_strchr(tab, '\n'))
+		return (ft_strcpy(tab, ft_strchr(tab, '\n') + 1));
+	if (ft_len(tab) > 0)
+		return (ft_strcpy(tab, ft_strchr(tab, '\0')));
+	return (NULL);
+}
+
+int					get_next_line(const int fd, char **line)
+{
+	char		buff[BUFF_SIZE + 1];
+	static char	*tab[4864];
 	char		*tmp;
 	int			bytes;
 
@@ -24,4 +43,19 @@ int		get_next_line(const int fd, char **line)
 	if (!tab[fd])
 		tab[fd] = ft_strnew(0);
 	bytes = read(fd, buff, BUFF_SIZE);
+	while (!ft_strchr(tab[fd], '\n') && bytes > 0)
+	{
+		buff[bytes] = '\0';
+		tmp = tab[fd];
+		tab[fd] = ft_strjoin(tmp, buff);
+		ft_strdel(&tmp);
+	}
+	*line = ft_strsub(tab[fd], 0, ft_len(tab[fd]));
+	if (!ft_rest(tab[fd]))
+	{
+		ft_strdel(&tab[fd]);
+		ft_strdel(line);
+		return (0);
+	}
+	return (1);
 }
