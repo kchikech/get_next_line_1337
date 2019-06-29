@@ -6,11 +6,12 @@
 /*   By: hkchikec <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/22 02:13:15 by hkchikec          #+#    #+#             */
-/*   Updated: 2019/06/27 19:54:47 by hkchikec         ###   ########.fr       */
+/*   Updated: 2019/06/28 21:02:53 by hkchikec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "libft/libft.h"
 
 static unsigned int	ft_len(char *str)
 {
@@ -42,8 +43,7 @@ int					get_next_line(const int fd, char **line)
 		return (-1);
 	if (!tab[fd])
 		tab[fd] = ft_strnew(0);
-	bytes = read(fd, buff, BUFF_SIZE);
-	while (!ft_strchr(tab[fd], '\n') && bytes > 0)
+	while (!ft_strchr(tab[fd], '\n') && (bytes = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[bytes] = '\0';
 		tmp = tab[fd];
